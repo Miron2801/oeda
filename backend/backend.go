@@ -9,13 +9,13 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/api", handleRequest)
+	http.HandleFunc("/api/setContainers", setContainers)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 
 
 }
 
-func handleRequest(w http.ResponseWriter, r *http.Request) {
+func setContainers(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		fmt.Fprintf(w, "not allowed method")
@@ -40,5 +40,4 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(string(body))
 
 	w.WriteHeader(http.StatusOK)
-
 }

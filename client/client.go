@@ -2,11 +2,12 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
-	"context"
 
 	"net/http"
+
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 )
@@ -17,25 +18,21 @@ func main() {
 		panic(err)
 	}
 
-	containers, err := cli.ContainerList(context.Background(), types.ContainerListOptions{})
+	images, err := cli.ImageList(context.Background(), types.ImageListOptions{})
 	if err != nil {
 		panic(err)
 	}
 	payload := map[string]interface{}{
-		"containers": []string{},
+		"images": []string{},
 	}
-	for _, container := range containers {
-		fmt.Printf("%s %s\n", container.ID[:10], container.Image)
-		containers, ok := payload["containers"].([]string)
-			if ok {
-				containers = append(containers, container.ImageID[7:19])
-				payload["containers"] = containers
-			} else {
-				fmt.Println("Список 'containers' не найден")
-			}
+	for _, image := range images {
+		fmt.Printf("%s %s\n", image.ID[:10], image.ID)
+		images, _ := payload["images"].([]string)
+		images = append(images, image.ID[7:19])
+		payload["images"] = images
 	}
 	result, _ := json.Marshal(payload)
-	url := "http://localhost:8080/api"
+	url := "http://localhost:8080/api/setContainers"
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(result))
 	if err != nil {
 		fmt.Println("какое то говно", err)
