@@ -2,18 +2,13 @@ version: '3.7'
  
 services:
   api:
-    build: backend
+    build: .
     restart: always
     ports:
-      - 8080:8080
-  # gitlab-runner:
-  #   container_name: gitlab-runner
-  #   image: gitlab/gitlab-runner:latest
-  #   restart: always
-  #   volumes:
-  #     - './runner-data:/home/gitlab_ci_multi_runner/data'
-  #     - './runner-config:/etc/gitlab-runner'
-  #     - '/var/run/docker.sock:/var/run/docker.sock:rw'
-  #   networks:
-  #     gitlab-networks:
-  #       ipv4_address: 10.5.0.3
+      - 8000:8000
+  crdb:
+    image: cockroachdb/cockroach:v19.2.2
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    command: start-single-node --insecure
