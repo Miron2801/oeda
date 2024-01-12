@@ -3,8 +3,10 @@ WORKDIR /build
 COPY go.mod . 
 RUN go mod download
 COPY . .
-RUN go build -o /main backend.go
+ARG service
+RUN go build -o $service ./cmd/$service/main.go
 
 FROM alpine:3
-COPY --from=builder main /bin/main
+ARG service
+COPY --from=builder /build/$service /bin/main
 ENTRYPOINT ["/bin/main"]

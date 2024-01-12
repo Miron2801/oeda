@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"eoda/intermal/models"
 	"fmt"
+	"os"
 
 	"net/http"
 
@@ -28,7 +29,7 @@ func main() {
 		images = append(images, models.Image{Name: container.ImageID, ContainerId: container.ID})
 	}
 	result, _ := json.Marshal(images)
-	url := "http://localhost:8000/api/checkContainers"
+	url := "http://" + os.Getenv("SERVER_IP") + ":8000/api/checkContainers"
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(result))
 	if err != nil {
 		fmt.Println("какое то говно", err)
@@ -55,6 +56,4 @@ func main() {
 
 		}
 	}
-
-	// cli.ContainerKill(context.Background())
 }

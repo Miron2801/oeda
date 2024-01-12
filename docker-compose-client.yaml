@@ -1,0 +1,13 @@
+version: '3.7'
+ 
+services:
+  client:
+    build: 
+      context: .
+      args:
+        - service=client
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - SERVER_IP=10.10.124.53

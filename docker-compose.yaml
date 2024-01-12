@@ -2,13 +2,21 @@ version: '3.7'
  
 services:
   api:
-    build: .
+    build: 
+      context: .
+      args:
+        - service=server
     restart: always
     ports:
       - 8000:8000
+    environment:
+      - DATABASE_URL=postgresql://root@crdb:26257?sslmode=disable
   crdb:
     image: cockroachdb/cockroach:v19.2.2
+    restart: always
     ports:
       - "26257:26257"
       - "8080:8080"
+    environment:
+      - DATABASE_URL=postgresql://root@crdb:26257?sslmode=disable
     command: start-single-node --insecure

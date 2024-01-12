@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
@@ -31,7 +32,7 @@ func main() {
 		payload["images"] = images
 	}
 	result, _ := json.Marshal(payload)
-	url := "http://10.10.124.53:8000/api/setContainers"
+	url := "http://" + os.Getenv("SERVER_IP") + "::8000/api/setContainers"
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(result))
 	if err != nil {
 		fmt.Println("какое то говно", err)
